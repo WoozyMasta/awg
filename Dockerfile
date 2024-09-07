@@ -7,17 +7,17 @@ RUN set -eu;\
     git clone --depth 1 --branch master https://github.com/amnezia-vpn/amneziawg-go.git; \
     git clone --depth 1 --branch master https://github.com/amnezia-vpn/amneziawg-tools.git
 
-WORKDIR /src/src/amneziawg-go
+WORKDIR /src/amneziawg-go
 RUN go build -ldflags '-linkmode external -extldflags "-fno-PIC -static"' -v -o /usr/bin
 
-WORKDIR /src/src/amneziawg-tools/src
+WORKDIR /src/amneziawg-tools/src
 RUN make
 
 FROM docker.io/alpine:3.19
 
 COPY --from=builder /usr/bin/amneziawg-go /usr/bin/amneziawg-go
-COPY --from=builder /go/amneziawg-tools/src/wg /usr/bin/awg
-COPY --from=builder /go/amneziawg-tools/src/wg-quick/linux.bash /usr/bin/awg-quick
+COPY --from=builder /src/amneziawg-tools/src/wg /usr/bin/awg
+COPY --from=builder /src/amneziawg-tools/src/wg-quick/linux.bash /usr/bin/awg-quick
 COPY src/rt_tables /etc/iproute2/rt_tables
 COPY src/awg-start /usr/bin/awg-start
 
