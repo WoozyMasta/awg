@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+: "${CONFIG:=${1:-/etc/awg/wg0.conf}}"
+
+# create /dev/net/tun if it does not exist
+if [ ! -c /dev/net/tun ]; then
+  mkdir -p /dev/net
+  mknod /dev/net/tun c 10 200
+fi
+
+if [ ! -f "$CONFIG" ]; then
+  echo "Config $CONFIG not found"
+  exit 1
+fi
+
+exec /usr/bin/awg-quick up "$CONFIG"
