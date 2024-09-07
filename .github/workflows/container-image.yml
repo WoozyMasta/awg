@@ -8,7 +8,7 @@ env:
   REGISTRY_IMAGE: woozymasta/awg
 
 jobs:
-  build_and_push:
+  build:
     name: Build and push container image
     runs-on: ubuntu-latest
     permissions:
