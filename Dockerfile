@@ -5,11 +5,13 @@ RUN set -eu;\
     apk update; \
     apk add --no-cache git make bash build-base linux-headers; \
     git clone --depth 1 --branch master https://github.com/amnezia-vpn/amneziawg-go.git; \
-    cd /src/amneziawg-go; \
-    go build -ldflags '-linkmode external -extldflags "-fno-PIC -static"' -v -o /usr/bin; \
-    git clone --depth 1 --branch master https://github.com/amnezia-vpn/amneziawg-tools.git; \
-    cd /src/amneziawg-tools/src; \
-    make
+    git clone --depth 1 --branch master https://github.com/amnezia-vpn/amneziawg-tools.git
+
+WORKDIR /src/src/amneziawg-go
+RUN go build -ldflags '-linkmode external -extldflags "-fno-PIC -static"' -v -o /usr/bin
+
+WORKDIR /src/src/amneziawg-tools/src
+RUN make
 
 FROM docker.io/alpine:3.19
 
