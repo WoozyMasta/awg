@@ -25,7 +25,7 @@ RUN set -eu;\
     apk update; \
     apk add --no-cache bash iptables iptables-legacy iproute2; \
     sed -i 's/^\(tty\d\:\:\)/#\1/' /etc/inittab; \
-    rm /etc/init.d/hwdrivers /etc/init.d/machine-id; \
+    rm -f /etc/init.d/hwdrivers /etc/init.d/machine-id || :; \
     sed -i 's/cmd sysctl -q \(.*\?\)=\(.*\)/[[ "$(sysctl -n \1)" != "\2" ]] \&\& \0/' /usr/bin/awg-quick; \
     chmod +x /usr/bin/amneziawg-go /usr/bin/awg /usr/bin/awg-quick /usr/bin/awg-start; \
     ln -s /sbin/iptables-legacy /bin/iptables; \
